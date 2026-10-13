@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Lunevo — designed in Paris</title>
+  <meta name="description" content="Lunevo started in a Paris kitchen in 2019. Meet the team building robot vacuums that clean themselves, built to last and repairable by design.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body data-page="about">
+  <script src="js/icons.js"></script>
+
+  <!-- ===== Header ===== -->
+  <header id="hdr">
+    <div class="hdr-in">
+      <a class="logo" href="index.html" aria-label="Lunevo — home">
+        <img src="img/logo-mark.svg" width="34" height="34" alt="">
+        <span>LUNEVO</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="catalog.html">Robots</a>
+        <a href="index.html#tech">Technology</a>
+        <a href="index.html#finder">Find yours</a>
+        <a href="index.html#compare">Compare</a>
+        <a href="blog.html">Journal</a>
+        <a href="about.html" class="on" aria-current="page">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="hdr-act">
+        <button id="cartBtn" class="icon-btn" type="button" aria-label="Open cart"><svg class="i"><use href="#i-cart"/></svg><b id="cartCount">0</b></button>
+        <a class="btn btn-lime btn-sm hide-sm" href="catalog.html">Shop now <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        <button id="burger" class="icon-btn lg-hide" type="button" aria-label="Open menu"><svg class="i"><use href="#i-menu"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Mobile menu ===== -->
+  <div class="mnav" id="mnav" aria-hidden="true">
+    <div class="mnav-top">
+      <a class="logo logo--light" href="index.html"><img src="img/logo-mark-light.svg" width="34" height="34" alt=""><span>LUNEVO</span></a>
+      <button class="icon-btn" id="mclose" type="button" aria-label="Close menu"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+    <a class="ml" href="catalog.html">Robots <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#tech">Technology <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#finder">Find your robot <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#compare">Compare <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="blog.html">Journal <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="about.html">About <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="support.html">Support <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="contact.html">Contact <svg class="i"><use href="#i-arrow"/></svg></a>
+    <p class="mnav-note">Free delivery in France · 30-day trial · 3-year warranty</p>
+  </div>
+
+  <!-- ===== Cart drawer ===== -->
+  <div class="ov" id="ov"></div>
+  <aside id="cart" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-head">
+      <h3 class="h3" style="margin:0">Your cart <span id="cartN" class="mut" style="font-family:Manrope;font-weight:600"></span></h3>
+      <button class="icon-btn" id="cartClose" type="button" aria-label="Close cart"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="cart-ship">
+      <div class="ship-bar"><i id="shipBar" style="width:0"></i></div>
+      <p id="shipTxt" class="text-xs mut mt-2 font-bold"></p>
+    </div>
+    <div id="cartItems" class="cart-body"></div>
+    <div class="cart-foot">
+      <div class="flex justify-between text-sm mut font-bold"><span>Delivery</span><span>Free</span></div>
+      <div class="flex justify-between items-center mt-2">
+        <span class="font-bold">Total <small class="mut font-semibold">VAT incl.</small></span>
+        <b id="cartTotal" class="display" style="font-size:1.5rem;letter-spacing:-.03em">$0</b>
+      </div>
+      <button id="checkout" class="btn btn-dark btn-block mt-4" type="button">Secure checkout <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></button>
+      <p class="text-xs mut text-center mt-3">30-day trial · Free returns · Pay in 3× at 0%</p>
+    </div>
+  </aside>
+
+  <div id="toast" role="status"><svg class="i"><use href="#i-check"/></svg><span id="toastT"></span></div>
+
+
+  <main id="main">
+    <div class="wrap pagetop">
+
+      <div class="phero">
+        <div class="crumb rv"><a href="index.html">Home</a><svg class="i"><use href="#i-chev-r"/></svg><span style="color:var(--ink)">About</span></div>
+        <h1 class="h2 rv" style="font-size:clamp(2.3rem,6vw,5rem);margin-top:1.2rem;max-width:16ch;line-height:1">We build robots so your home <span class="grad">cleans itself</span></h1>
+      </div>
+
+      <!-- Story -->
+      <div class="grid gap-5 lg:grid-cols-[1.2fr_.8fr] mt-6">
+        <div class="mi mi--hero rv">
+          <img src="https://images.pexels.com/photos/8146330/pexels-photo-8146330.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1400" alt="Bright modern room with wooden floor" loading="lazy">
+          <div style="left:28px;bottom:26px"><b>Paris studio, Rue de Turbigo</b><span>Where every Lunevo is imagined, tested and argued over.</span></div>
+        </div>
+        <!-- right column: the text card stretches, the two tiles sit at the bottom, level with the photo -->
+        <div class="grid gap-5 about-side">
+          <div class="card" style="padding:var(--pad-block)">
+            <p class="lead" style="margin:0;max-width:none">Lunevo started in a Paris kitchen in 2019 with a simple idea: housework is a design problem. Our founders — an aerospace navigation engineer and an industrial designer — built the first prototype to clean around a very stubborn cat.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bt bt-dark spot rv" style="min-height:170px;padding:var(--pad-card)"><b class="display" style="font-size:2.2rem;letter-spacing:-.04em">2019</b><span class="text-sm" style="opacity:.7">Founded in Paris</span></div>
+            <div class="bt bt-lime spot rv" style="min-height:170px;padding:var(--pad-card)"><b class="display" style="font-size:2.2rem;letter-spacing:-.04em">124k+</b><span class="text-sm" style="opacity:.8">Homes cleaned daily</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journey -->
+      <section class="sec">
+        <div class="mb-10 max-w-3xl"><span class="eyebrow rv">Our journey</span><h2 class="h2 rv" style="--d:.06s">Seven years of <span class="grad">obsessive iteration</span></h2></div>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div class="ben rv"><b class="display grad" style="font-size:2rem">2019</b><h3 class="h3 mt-2">First prototype</h3><p>Two founders, one cat, a 3D printer and 61 failed chassis designs.</p></div>
+          <div class="ben rv" style="--d:.06s"><b class="display grad" style="font-size:2rem">2021</b><h3 class="h3 mt-2">Lume launches</h3><p>The first Lunevo with 360° LiDAR sells out in France in nine days.</p></div>
+          <div class="ben rv" style="--d:.12s"><b class="display grad" style="font-size:2rem">2023</b><h3 class="h3 mt-2">Lyon logistics hub</h3><p>Two-day delivery across France, with carbon-neutral shipping.</p></div>
+          <div class="ben rv" style="--d:.18s"><b class="display grad" style="font-size:2rem">2026</b><h3 class="h3 mt-2">Atlas Ultra</h3><p>Hot-water mopping, an extending arm and 22,000 Pa of suction.</p></div>
+        </div>
+      </section>
+
+      <!-- Values -->
+      <section class="sec" style="padding-top:0">
+        <div class="mb-10 max-w-3xl"><span class="eyebrow rv">What we believe</span><h2 class="h2 rv" style="--d:.06s">Three rules we <span class="grad">never break</span></h2></div>
+        <div class="bento3">
+          <div class="bt bt-dark spot rv">
+            <div class="ib tile--lime"><svg class="i"><use href="#i-eye"/></svg></div>
+            <div><h3 class="h3" style="margin:0 0 .5rem">Design that earns its place</h3><p>If a robot sits in your living room, it should look like it belongs there. No blinking toys, no plastic.</p></div>
+          </div>
+          <div class="bt bt-indigo spot rv" style="--d:.08s">
+            <div class="ib" style="background:rgba(255,255,255,.16)"><svg class="i"><use href="#i-leaf"/></svg></div>
+            <div><h3 class="h3" style="margin:0 0 .5rem">Built to be repaired</h3><p>Every battery, brush motor and wheel is replaceable. Spare parts for eight years, guaranteed.</p></div>
+          </div>
+          <div class="bt bt-lime spot rv" style="--d:.12s">
+            <div class="ib" style="background:var(--ink);color:var(--lime)"><svg class="i"><use href="#i-shield"/></svg></div>
+            <div><h3 class="h3" style="margin:0 0 .5rem">Privacy by default</h3><p>Maps and camera images are processed on the robot. Nothing leaves your home unless you say so.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section class="sec" style="padding-top:0">
+        <div class="mb-10"><span class="eyebrow rv">The team</span><h2 class="h2 rv" style="--d:.06s">People behind <span class="grad">the discs</span></h2></div>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="card lift rv" style="padding:var(--pad-card)">
+            <div class="avatar"><img src="https://images.pexels.com/photos/33680700/pexels-photo-33680700.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600" alt="Élodie Marchand" width="600" height="600" loading="lazy"></div>
+            <h3 class="h3 mt-4">Élodie Marchand</h3><p class="text-sm mut" style="margin:.2rem 0 0">Co-founder &amp; CEO</p>
+          </div>
+          <div class="card lift rv" style="padding:var(--pad-card);--d:.06s">
+            <div class="avatar"><img src="https://images.pexels.com/photos/33799456/pexels-photo-33799456.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600" alt="Karim Benali" width="600" height="600" loading="lazy"></div>
+            <h3 class="h3 mt-4">Karim Benali</h3><p class="text-sm mut" style="margin:.2rem 0 0">Co-founder &amp; CTO</p>
+          </div>
+          <div class="card lift rv" style="padding:var(--pad-card);--d:.12s">
+            <div class="avatar"><img src="https://images.pexels.com/photos/7717254/pexels-photo-7717254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600" alt="Sophie Vidal" width="600" height="600" loading="lazy"></div>
+            <h3 class="h3 mt-4">Sophie Vidal</h3><p class="text-sm mut" style="margin:.2rem 0 0">Head of Design</p>
+          </div>
+          <div class="card lift rv" style="padding:var(--pad-card);--d:.18s">
+            <div class="avatar"><img src="https://images.pexels.com/photos/7752811/pexels-photo-7752811.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600" alt="Arnaud Roche" width="600" height="600" loading="lazy"></div>
+            <h3 class="h3 mt-4">Arnaud Roche</h3><p class="text-sm mut" style="margin:.2rem 0 0">Head of Customer Care</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="dark cta mt-gap spot rv">
+        <div class="flex flex-wrap items-center justify-between gap-6">
+          <div>
+            <h2 class="h2" style="font-size:clamp(1.8rem,4vw,3rem)">Come see one in person</h2>
+            <p class="on-dark" style="margin-top:.7rem">Visit our Paris showroom — coffee on us, demos on real parquet.</p>
+          </div>
+          <a class="btn btn-lime" href="contact.html">Plan your visit <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ===== Footer ===== -->
+  <footer class="ft">
+    <div class="wrap">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <a class="logo" href="index.html"><img src="img/logo-mark-light.svg" width="34" height="34" alt=""><span>LUNEVO</span></a>
+          <p class="ft-about">Robot vacuums designed in Paris. Obsessively quiet, absurdly powerful, beautiful enough to leave out.</p>
+          <form class="nl" id="nlForm" novalidate>
+            <input type="email" placeholder="Your email — get 10% off" aria-label="Email">
+            <button class="btn btn-lime btn-sm" type="submit">Join <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></button>
+          </form>
+          <p id="nlMsg"></p>
+        </div>
+        <div>
+          <h5>Shop</h5>
+          <ul>
+            <li><a href="catalog.html">All robots</a></li>
+            <li><a href="product.html?id=atlas-ultra">Atlas Ultra</a></li>
+            <li><a href="product.html?id=orbit-pro">Orbit Pro</a></li>
+            <li><a href="index.html#finder">Robot finder</a></li>
+            <li><a href="index.html#compare">Compare models</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About Lunevo</a></li>
+            <li><a href="blog.html">Journal</a></li>
+            <li><a href="contact.html">Contact &amp; showroom</a></li>
+            <li><a href="about.html">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Support</h5>
+          <ul>
+            <li><a href="support.html">Help centre</a></li>
+            <li><a href="support.html">Delivery &amp; returns</a></li>
+            <li><a href="support.html">Warranty</a></li>
+            <li><a href="tel:+33184880042">+33 1 84 88 00 42</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-12 pt-6" style="border-top:1px solid rgba(255,255,255,.12)">
+        <p class="ft-legal">© 2019–2026 Lunevo SAS · 18 Rue de Turbigo, 75002 Paris</p>
+        <!-- placeholder link: replace href="#" with the real URL when it is ready -->
+        <a class="ft-credit" href="#">Created by Artem Punin</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

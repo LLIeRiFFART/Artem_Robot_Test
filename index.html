@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUNEVO — Robot vacuums designed in Paris</title>
+  <meta name="description" content="Lunevo designs premium robot vacuums in Paris: 22,000 Pa suction, 3D navigation, self-washing stations. Free delivery in France, 30-day trial, 3-year warranty.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (utility classes: flex, grid, gap, text-sm …) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Three.js import map (used by js/robot3d.js) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body data-page="home">
+  <script src="js/icons.js"></script>
+
+  <!-- ===== Header ===== -->
+  <header id="hdr">
+    <div class="hdr-in">
+      <a class="logo" href="index.html" aria-label="Lunevo — home">
+        <img src="img/logo-mark.svg" width="34" height="34" alt="">
+        <span>LUNEVO</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="catalog.html">Robots</a>
+        <a href="index.html#tech">Technology</a>
+        <a href="index.html#finder">Find yours</a>
+        <a href="index.html#compare">Compare</a>
+        <a href="blog.html">Journal</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="hdr-act">
+        <button id="cartBtn" class="icon-btn" type="button" aria-label="Open cart"><svg class="i"><use href="#i-cart"/></svg><b id="cartCount">0</b></button>
+        <a class="btn btn-lime btn-sm hide-sm" href="catalog.html">Shop now <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        <button id="burger" class="icon-btn lg-hide" type="button" aria-label="Open menu"><svg class="i"><use href="#i-menu"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Mobile menu ===== -->
+  <div class="mnav" id="mnav" aria-hidden="true">
+    <div class="mnav-top">
+      <a class="logo logo--light" href="index.html"><img src="img/logo-mark-light.svg" width="34" height="34" alt=""><span>LUNEVO</span></a>
+      <button class="icon-btn" id="mclose" type="button" aria-label="Close menu"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+    <a class="ml" href="catalog.html">Robots <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#tech">Technology <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#finder">Find your robot <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#compare">Compare <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="blog.html">Journal <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="about.html">About <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="support.html">Support <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="contact.html">Contact <svg class="i"><use href="#i-arrow"/></svg></a>
+    <p class="mnav-note">Free delivery in France · 30-day trial · 3-year warranty</p>
+  </div>
+
+  <!-- ===== Cart drawer ===== -->
+  <div class="ov" id="ov"></div>
+  <aside id="cart" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-head">
+      <h3 class="h3" style="margin:0">Your cart <span id="cartN" class="mut" style="font-family:Manrope;font-weight:600"></span></h3>
+      <button class="icon-btn" id="cartClose" type="button" aria-label="Close cart"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="cart-ship">
+      <div class="ship-bar"><i id="shipBar" style="width:0"></i></div>
+      <p id="shipTxt" class="text-xs mut mt-2 font-bold"></p>
+    </div>
+    <div id="cartItems" class="cart-body"></div>
+    <div class="cart-foot">
+      <div class="flex justify-between text-sm mut font-bold"><span>Delivery</span><span>Free</span></div>
+      <div class="flex justify-between items-center mt-2">
+        <span class="font-bold">Total <small class="mut font-semibold">VAT incl.</small></span>
+        <b id="cartTotal" class="display" style="font-size:1.5rem;letter-spacing:-.03em">$0</b>
+      </div>
+      <button id="checkout" class="btn btn-dark btn-block mt-4" type="button">Secure checkout <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></button>
+      <p class="text-xs mut text-center mt-3">30-day trial · Free returns · Pay in 3× at 0%</p>
+    </div>
+  </aside>
+
+  <!-- Film modal -->
+  <div class="modal" id="vmodal" aria-hidden="true">
+    <div class="box">
+      <video id="vmodalVideo" playsinline controls loop preload="none"></video>
+      <button class="icon-btn" id="vclose" type="button" style="position:absolute;top:14px;right:14px;z-index:3" aria-label="Close video"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+  </div>
+
+  <div id="toast" role="status"><svg class="i"><use href="#i-check"/></svg><span id="toastT"></span></div>
+
+
+  <main id="main">
+
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <a href="product.html?id=atlas-ultra" class="pill rv"><b>NEW</b> Atlas Ultra — hot-water mop, 22,000 Pa <svg class="i"><use href="#i-arrow"/></svg></a>
+            <h1 class="h-hero rv" style="--d:.08s"><span class="h-line">CLEANING THAT</span> <span class="h-line"><span class="grad">RUNS ITSELF</span></span></h1>
+            <p class="lead rv" style="--d:.16s;margin-top:1.4rem">Lunevo robots map your home in 3D, avoid socks and cables, wash their own mops and empty themselves. Get your weekends back — try it free for 30 days, with free delivery and a 3-year warranty.</p>
+
+            <div class="flex flex-wrap items-center gap-3 mt-8 rv" style="--d:.24s">
+              <a class="btn btn-lime" href="#finder">Find my robot <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+              <button class="btn btn-ghost" type="button" data-video>Watch the film <span class="ico"><svg class="i"><use href="#i-play"/></svg></span></button>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-6 gap-y-4 mt-9 rv" style="--d:.32s">
+              <div class="flex items-center gap-3">
+                <div class="avs"><i style="background:#7b5cff">CD</i><i style="background:#ff7a5c">LM</i><i style="background:#4a3fd6">IB</i><i style="background:#0c0e20">+</i></div>
+                <div class="text-sm leading-tight">
+                  <div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div>
+                  <b>4.8/5</b> <span class="mut">· 12,480 verified reviews</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 text-sm font-bold"><span class="ico-circle"><svg class="i"><use href="#i-truck"/></svg></span> Free delivery in 2–4 days</div>
+            </div>
+          </div>
+
+          <!-- 3D robot (canvas) with SVG fallback -->
+          <div class="hero-visual rv rv-s" style="--d:.15s" id="heroVisual">
+            <div class="circ"></div>
+            <div class="hero-fb" id="heroFb"></div>
+            <canvas id="heroCanvas" aria-label="3D model of a Lunevo robot vacuum" role="img"></canvas>
+            <div class="shadow-ell"></div>
+            <div class="fchip" style="left:-2%;top:12%" data-par="14"><span class="ib"><svg class="i"><use href="#i-wind"/></svg></span><span><b>22,000 Pa</b>HyperSuction</span></div>
+            <div class="fchip" style="right:-2%;top:42%;animation-delay:-2s" data-par="-10"><span class="ib"><svg class="i"><use href="#i-battery"/></svg></span><span><b>300 min</b>Runtime / charge</span></div>
+            <div class="fchip" style="left:2%;top:74%;animation-delay:-4s" data-par="18"><span class="ib"><svg class="i"><use href="#i-paw"/></svg></span><span><b>Zero tangles</b>Pet-hair proof</span></div>
+          </div>
+        </div>
+
+        <!-- Dashboard strip -->
+        <div class="dash">
+          <div class="dark dk spot rv">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <div class="flex items-center gap-3">
+                <span class="tile tile--lime" style="width:2.4rem;height:2.4rem;border-radius:14px"><svg class="i"><use href="#i-home"/></svg></span>
+                <div class="leading-tight"><b class="display" style="font-size:.95rem">Lunevo Home</b><div class="text-xs" style="color:rgba(255,255,255,.55)">Atlas Ultra · cleaning <span id="dashRoom">kitchen</span></div></div>
+              </div>
+              <span class="tagp" style="background:rgba(200,243,60,.15)">● LIVE</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mt-5">
+              <div><div class="dash-label">Battery</div><b class="dash-value" id="dashBat">86%</b></div>
+              <div><div class="dash-label">Suction</div><b class="dash-value">Turbo</b></div>
+              <div><div class="dash-label">Cleaned</div><b class="dash-value"><span id="dashArea">63</span> m²</b></div>
+            </div>
+            <div class="bar mt-5"><i id="dashBar" style="width:60%;transition:width 1.2s var(--ease)"></i></div>
+          </div>
+          <div class="st st--indigo rv" style="--d:.08s"><small>Max suction power</small><div><b data-count="22000" data-fmt="1">22,000</b> <small>Pa</small></div></div>
+          <div class="st st--white rv" style="--d:.16s"><small>Obstacles recognised</small><div><b data-count="120" data-suf="+">120+</b> <small>object types</small></div></div>
+          <div class="st st--lime rv" style="--d:.24s"><small style="opacity:.7">Hands-free for up to</small><div><b data-count="75">75</b> <small>days per dust bag</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Trust ticker ===== -->
+    <section class="ticker-sec">
+      <div class="ticker"><div class="ticker-in" id="tickerIn">
+        <span class="flex items-center gap-2 font-bold"><svg class="i" style="color:var(--violet)"><use href="#i-truck"/></svg>Free delivery across France &amp; EU</span>
+        <span class="flex items-center gap-2 font-bold"><svg class="i" style="color:var(--violet)"><use href="#i-return"/></svg>30-day home trial, free returns</span>
+        <span class="flex items-center gap-2 font-bold"><svg class="i" style="color:var(--violet)"><use href="#i-shield"/></svg>3-year warranty included</span>
+        <span class="flex items-center gap-2 font-bold"><svg class="i" style="color:var(--violet)"><use href="#i-tag"/></svg>Price-match guarantee</span>
+        <span class="flex items-center gap-2 font-bold"><svg class="i" style="color:var(--violet)"><use href="#i-headset"/></svg>Support in French &amp; English</span>
+        <span class="flex items-center gap-2 font-bold"><svg class="i" style="color:var(--violet)"><use href="#i-leaf"/></svg>Spare parts for 8 years</span>
+      </div></div>
+    </section>
+
+    <!-- ===== Four key features ===== -->
+    <section class="sec-sm">
+      <div class="wrap">
+        <div class="dark fstrip spot rv">
+          <div>
+            <div class="ib"><svg class="i"><use href="#i-wind"/></svg></div>
+            <div class="eyebrow">Power</div>
+            <h3 class="h3" style="margin:.5rem 0">HyperSuction 22,000 Pa</h3>
+            <p>A brushless turbine that lifts sand from parquet joints and pet hair from deep wool.</p>
+          </div>
+          <div>
+            <div class="ib"><svg class="i"><use href="#i-cube"/></svg></div>
+            <div class="eyebrow">Navigation</div>
+            <h3 class="h3" style="margin:.5rem 0">3D LiDAR + AI vision</h3>
+            <p>Maps a 120 m² flat in 4 minutes and dodges cables, socks and slippers.</p>
+          </div>
+          <div>
+            <div class="ib"><svg class="i"><use href="#i-battery"/></svg></div>
+            <div class="eyebrow">Endurance</div>
+            <h3 class="h3" style="margin:.5rem 0">300 minutes per charge</h3>
+            <p>Cleans a whole floor, recharges and resumes exactly where it stopped.</p>
+          </div>
+          <div>
+            <div class="ib"><svg class="i"><use href="#i-drop"/></svg></div>
+            <div class="eyebrow">Self-care</div>
+            <h3 class="h3" style="margin:.5rem 0">Self-washing station</h3>
+            <p>Washes mops in 75 °C water, dries them with hot air and empties the bin itself.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3D anatomy (scroll-driven) ===== -->
+    <section id="tech" class="ana">
+      <div class="ana-sticky" id="anaSticky">
+        <div class="ana-top"><span>Anatomy of Atlas Ultra</span><span id="anaCount">01 / 07</span></div>
+        <div class="ana-cv" id="anaCv">
+          <div class="ana-fb" id="anaFb"></div>
+          <canvas id="anaCanvas" aria-label="Exploded 3D view of the robot vacuum" role="img"></canvas>
+        </div>
+        <div class="ana-txt" id="anaTxt">
+          <div class="ana-step on"><div class="k">01 — Overview</div><h3>Meet Atlas Ultra</h3><p>A 9.6 cm disc that does the work of a cleaning crew. Keep scrolling and we’ll take it apart — piece by piece.</p><div class="nums"><div><b>Ø 34 cm</b><span>Slim footprint</span></div><div><b>9.6 cm</b><span>Slides under sofas</span></div></div></div>
+          <div class="ana-step"><div class="k">02 — Eyes</div><h3>3D LiDAR + structured light</h3><p>A retractable turret scans 360° while a 3D light projector reads the height of every object — down to a 10 mm sock.</p><div class="nums"><div><b>360°</b><span>Laser sweep</span></div><div><b>10 mm</b><span>Obstacle detail</span></div></div></div>
+          <div class="ana-step"><div class="k">03 — Brain</div><h3>An AI core that learns your home</h3><p>A dedicated neural chip recognises 120+ object types in real time. Cables, pet accidents, shoes — it decides, you don’t have to.</p><div class="nums"><div><b>120+</b><span>Objects recognised</span></div><div><b>4 min</b><span>To map 120 m²</span></div></div></div>
+          <div class="ana-step"><div class="k">04 — Lungs</div><h3>HyperSuction turbine</h3><p>A brushless motor spins a five-blade impeller at 98,000 rpm. Less noise, more pull: it auto-boosts the second it feels carpet.</p><div class="nums"><div><b>22,000 Pa</b><span>Peak suction</span></div><div><b>52 dB</b><span>Library-quiet</span></div></div></div>
+          <div class="ana-step"><div class="k">05 — Heart</div><h3>A battery built for big homes</h3><p>6,400 mAh of high-density cells with smart thermal control. Runs 300 minutes, then recharges and resumes mid-room.</p><div class="nums"><div><b>300 min</b><span>Runtime</span></div><div><b>0→80%</b><span>In 60 minutes</span></div></div></div>
+          <div class="ana-step"><div class="k">06 — Hands</div><h3>Brushes, mop and a 40 mm climb</h3><p>A zero-tangle roller, a spinning side brush with an extending arm, and a 75 °C hot-water mop that lifts itself over carpet.</p><div class="nums"><div><b>0</b><span>Hair tangles</span></div><div><b>40 mm</b><span>Threshold climb</span></div></div></div>
+          <div class="ana-step"><div class="k">07 — Together</div><h3>One robot zero effort</h3><p>Every part tuned to disappear into your day. Set it, forget it, come home to floors that look freshly cleaned.</p><div class="mt-5"><a class="btn btn-lime btn-sm" href="product.html?id=atlas-ultra">Discover Atlas Ultra <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a></div></div>
+        </div>
+        <div class="ana-rail" id="anaRail"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="ana-hint">Scroll to explore</div>
+        <div class="ana-prog"><i id="anaBar"></i></div>
+      </div>
+    </section>
+
+    <!-- ===== Smart navigation map ===== -->
+    <section class="sec" id="nav-map">
+      <div class="wrap">
+        <div class="dark mapwrap spot">
+          <div class="mapcopy">
+            <span class="eyebrow eyebrow--lime">Smart navigation</span>
+            <h2 class="h2">Maps every room <span class="grad">so you never move a chair</span></h2>
+            <p class="lead on-dark" style="margin-top:1.2rem">Room by room, line by line — Lunevo’s planner cleans in tidy rows, never repeats a pass, and returns to the dock to recharge before finishing the job. Scroll to watch it work.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8">
+              <div class="mini"><b id="mapPct">0%</b><span>Mission</span></div>
+              <div class="mini"><b id="mapRooms">0/4</b><span>Rooms</span></div>
+              <div class="mini"><b id="mapArea">0</b><span>m² cleaned</span></div>
+              <div class="mini"><b id="mapTime">0</b><span>minutes</span></div>
+            </div>
+            <ul class="checklist">
+              <li><svg class="i"><use href="#i-check"/></svg>Multi-floor memory — save up to 4 maps</li>
+              <li><svg class="i"><use href="#i-check"/></svg>No-go zones and virtual walls from the app</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Recharge &amp; resume — never leaves a room half done</li>
+            </ul>
+          </div>
+          <div class="plan" id="mapPlan">
+            <svg viewBox="0 0 600 420" aria-label="Floor plan showing the robot cleaning path" role="img">
+              <rect class="room" x="20" y="200" width="330" height="200" rx="18"/>
+              <rect class="room" x="360" y="200" width="220" height="200" rx="18"/>
+              <rect class="room" x="20" y="20" width="330" height="170" rx="18"/>
+              <rect class="room" x="360" y="20" width="220" height="170" rx="18"/>
+              <text class="rl" x="36" y="394">Living room</text>
+              <text class="rl" x="376" y="394">Kitchen</text>
+              <text class="rl" x="36" y="184">Bedroom</text>
+              <text class="rl" x="376" y="184">Office</text>
+              <g id="mapDirt"></g>
+              <path id="mapTrailWide" fill="none" stroke="#c8f33c" stroke-opacity=".22" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+              <path id="mapPathBase" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1.5" stroke-dasharray="3 5" stroke-linejoin="round"/>
+              <path id="mapTrail" fill="none" stroke="#c8f33c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <g id="mapDock" transform="translate(38 224)"><rect x="-14" y="-12" width="28" height="24" rx="8" fill="#7b5cff"/><path d="M-4 -3h8M-4 3h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+              <g id="mapBot">
+                <circle r="18" fill="rgba(200,243,60,.25)"><animate attributeName="r" values="12;22;12" dur="2s" repeatCount="indefinite"/></circle>
+                <circle r="10" fill="#c8f33c"/>
+                <circle r="3.6" fill="#0c0e20"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Video showcase ===== -->
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="grid gap-6 lg:grid-cols-[1fr_.8fr] lg:items-end mb-10">
+          <div><span class="eyebrow rv">Real homes, real floors</span><h2 class="h2 rv" style="--d:.06s">See it cross a real home <span class="grad">without a pause</span></h2></div>
+          <p class="lead rv" style="--d:.12s">Hardwood, herringbone, rugs, tight corners. Filmed in actual apartments — no studio tricks, no speed-ups.</p>
+        </div>
+        <div class="vshow rv rv-s" id="vshow">
+          <!-- poster = still frame shown until the video has downloaded -->
+          <video muted loop playsinline preload="none" data-i="0" class="on" poster="https://images.pexels.com/videos/8566376/ai-apartment-appliance-architecture-8566376.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600"></video>
+          <video muted loop playsinline preload="none" data-i="1" poster="https://images.pexels.com/videos/8566378/ai-antique-appliance-architecture-8566378.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600"></video>
+          <video muted loop playsinline preload="none" data-i="2" poster="https://images.pexels.com/videos/8566514/ai-apartment-appliance-automatic-8566514.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600"></video>
+          <video muted loop playsinline preload="none" data-i="3" poster="https://images.pexels.com/videos/4109314/pexels-photo-4109314.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600"></video>
+          <button class="btn btn-ghost btn-sm vplay" type="button" data-video>Full film <span class="ico"><svg class="i"><use href="#i-play"/></svg></span></button>
+          <div class="vcap">
+            <div>
+              <h3 id="vTitle">Herringbone parquet, flawlessly</h3>
+              <p id="vDesc">Soft rubber wheels and a fine-edge brush lift dust from the joints without a scratch.</p>
+            </div>
+            <div class="vtabs" id="vtabs">
+              <button class="vtab on" type="button" data-vt="0">Hardwood</button>
+              <button class="vtab" type="button" data-vt="1">Under furniture</button>
+              <button class="vtab" type="button" data-vt="2">Rugs &amp; carpets</button>
+              <button class="vtab" type="button" data-vt="3">Everyday life</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Bento: engineered details ===== -->
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="max-w-3xl mb-10"><span class="eyebrow rv">Engineered details</span><h2 class="h2 rv" style="--d:.06s">Details you only <span class="grad">notice years later</span></h2></div>
+        <div class="bento">
+          <div class="bt bt-grad b-a spot rv">
+            <svg class="deco" style="right:30px;bottom:30px;width:200px;height:200px;opacity:.9" viewBox="0 0 200 200" fill="none" aria-hidden="true"><circle cx="100" cy="100" r="80" stroke="rgba(255,255,255,.14)" stroke-width="1.5"/><circle cx="100" cy="100" r="52" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/><circle cx="100" cy="100" r="24" fill="#c8f33c"/><path d="M100 20v40M100 140v40M20 100h40M140 100h40" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/></svg>
+            <div class="ib tile--lime"><svg class="i"><use href="#i-spark"/></svg></div>
+            <div style="position:relative"><div class="big">0</div><h3 class="h3" style="margin:.6rem 0 .5rem">hair tangles ever</h3><p>Our Zero-Tangle™ comb roller separates hair as it picks it up and sends it straight to the bin. Long hair, dog fur, tassels — handled.</p></div>
+          </div>
+          <div class="bt bt-vio b-b spot rv" style="--d:.08s">
+            <div class="ib" style="background:rgba(255,255,255,.18)"><svg class="i"><use href="#i-drop"/></svg></div>
+            <div><div class="big">75°C</div><h3 class="h3" style="margin:.5rem 0 .4rem">Hot-water mopping</h3><p>Dried-on coffee and cooking splashes dissolve; the mop is rinsed and hot-air dried after every run.</p></div>
+          </div>
+          <div class="bt bt-lime b-c spot rv" style="--d:.16s">
+            <div class="ib" style="background:var(--ink);color:var(--lime)"><svg class="i"><use href="#i-volume"/></svg></div>
+            <div><div class="big">52 dB</div><h3 class="h3" style="margin:.5rem 0 .4rem">Quieter than a conversation</h3><p>Quiet mode you can run during a video call or while the baby sleeps.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Line-up ===== -->
+    <section class="sec" id="lineup" style="padding-top:0">
+      <div class="wrap">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div><span class="eyebrow rv">The line-up</span><h2 class="h2 rv" style="--d:.06s">Pick the one<br><span class="grad">that fits how you live</span></h2></div>
+          <div class="flex items-center gap-3 rv">
+            <a href="catalog.html" class="btn btn-ghost btn-sm" style="margin-right:.4rem">View all <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+            <button class="icon-btn" id="railPrev" type="button" aria-label="Previous"><svg class="i"><use href="#i-chev-l"/></svg></button>
+            <button class="icon-btn" id="railNext" type="button" aria-label="Next" style="background:var(--ink);color:#fff"><svg class="i"><use href="#i-chev-r"/></svg></button>
+          </div>
+        </div>
+        <!-- cards are generated by js/home.js from js/data.js -->
+        <div class="rail" id="lineupRail"></div>
+      </div>
+    </section>
+
+    <!-- ===== Robot finder (calculator) ===== -->
+    <section class="sec" id="finder" style="padding-top:0">
+      <div class="wrap">
+        <div class="max-w-3xl mb-10">
+          <span class="eyebrow rv">Robot finder</span>
+          <h2 class="h2 rv" style="--d:.06s">Tell us your floors <span class="grad">we pick the right robot</span></h2>
+          <p class="lead rv mt-4" style="--d:.1s">Eight quick questions. Instantly see the right model, how long a full clean takes, and your exact price with add-ons and instalments.</p>
+        </div>
+
+        <div class="fgrid">
+          <!-- Questions -->
+          <div class="fcard rv" id="fForm">
+            <div class="fq">
+              <h4><em>1</em> How big is your home?</h4>
+              <div class="flex items-end justify-between gap-3 mb-3">
+                <div class="display" style="font-size:2.3rem;font-weight:800;letter-spacing:-.04em;line-height:1"><span id="fAreaV">85</span> <span style="font-size:1rem;color:var(--mut);font-weight:700">m²</span></div>
+                <div class="flex flex-wrap gap-2 justify-end">
+                  <button class="preset" type="button" data-preset="35">Studio</button>
+                  <button class="preset" type="button" data-preset="60">2 rooms</button>
+                  <button class="preset" type="button" data-preset="100">Family</button>
+                  <button class="preset" type="button" data-preset="170">Large</button>
+                </div>
+              </div>
+              <input type="range" id="fArea" min="20" max="300" step="5" value="85" aria-label="Home size in square metres">
+            </div>
+
+            <div class="fq">
+              <h4><em>2</em> How many floors to clean?</h4>
+              <div class="opts" data-k="levels" style="--c:3">
+                <button class="opt on" type="button" data-v="1">1 floor</button>
+                <button class="opt" type="button" data-v="2">2 floors</button>
+                <button class="opt" type="button" data-v="3">3+ floors</button>
+              </div>
+            </div>
+
+            <div class="fq">
+              <h4><em>3</em> What are your floors?</h4>
+              <div class="opts" data-k="floor" style="--c:3">
+                <button class="opt on" type="button" data-v="hard"><svg class="i"><use href="#i-grid"/></svg>Hard floors<small>Parquet, tile</small></button>
+                <button class="opt" type="button" data-v="mixed"><svg class="i"><use href="#i-layers"/></svg>Mixed<small>Rugs + hard</small></button>
+                <button class="opt" type="button" data-v="carpet"><svg class="i"><use href="#i-sofa"/></svg>Mostly carpet<small>Wall-to-wall</small></button>
+              </div>
+            </div>
+
+            <div class="fq">
+              <h4><em>4</em> Any pets at home?</h4>
+              <div class="opts" data-k="pets" style="--c:3">
+                <button class="opt on" type="button" data-v="none"><svg class="i"><use href="#i-home"/></svg>No pets</button>
+                <button class="opt" type="button" data-v="short"><svg class="i"><use href="#i-paw"/></svg>Short hair<small>1 pet</small></button>
+                <button class="opt" type="button" data-v="long"><svg class="i"><use href="#i-paw"/></svg>Long hair<small>Or several pets</small></button>
+              </div>
+            </div>
+
+            <div class="fq">
+              <h4><em>5</em> Who lives there?</h4>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div class="opts" data-k="people" style="--c:3">
+                  <button class="opt on" type="button" data-v="2">1–2<small>people</small></button>
+                  <button class="opt" type="button" data-v="4">3–4<small>people</small></button>
+                  <button class="opt" type="button" data-v="5">5+<small>people</small></button>
+                </div>
+                <div class="opts" data-k="allergy" style="--c:2">
+                  <button class="opt on" type="button" data-v="0">No allergies</button>
+                  <button class="opt" type="button" data-v="1">Allergy-prone<small>HEPA filter</small></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="fq">
+              <h4><em>6</em> Do you want it to mop too?</h4>
+              <div class="opts" data-k="mop" style="--c:2">
+                <button class="opt on" type="button" data-v="0"><svg class="i"><use href="#i-wind"/></svg>Vacuum only</button>
+                <button class="opt" type="button" data-v="1"><svg class="i"><use href="#i-drop"/></svg>Vacuum + mop</button>
+              </div>
+            </div>
+
+            <div class="fq">
+              <h4><em>7</em> How hands-free should it be?</h4>
+              <div class="opts" data-k="hands" style="--c:3">
+                <button class="opt on" type="button" data-v="0">I’ll empty it<small>Simple dock</small></button>
+                <button class="opt" type="button" data-v="1">Auto-empty<small>Up to 60 days</small></button>
+                <button class="opt" type="button" data-v="2">Fully hands-free<small>Self-washing</small></button>
+              </div>
+            </div>
+
+            <div class="fq">
+              <h4><em>8</em> Your budget</h4>
+              <div class="display" style="font-size:1.8rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.7rem">up to $<span id="fBudgetV">1,000</span></div>
+              <input type="range" id="fBudget" min="300" max="1500" step="50" value="1000" aria-label="Budget in dollars">
+              <div class="flex justify-between text-xs mut font-bold mt-2"><span>$300</span><span>$1,500</span></div>
+            </div>
+          </div>
+
+          <!-- Result (filled by js/home.js) -->
+          <div class="fres rv" style="--d:.1s">
+            <div class="fres-in" id="fres">
+              <div class="flex items-center justify-between gap-3">
+                <span class="tagp" style="background:rgba(255,255,255,.14);color:var(--lime)">Your best match</span>
+                <b id="rMatch" class="display" style="font-size:.95rem;color:var(--lime)">98% match</b>
+              </div>
+              <div class="flex items-center gap-4 mt-5">
+                <div id="rSvg" style="width:110px;height:110px;flex:none;border-radius:26px;background:rgba(255,255,255,.1);display:grid;place-items:center;padding:10px"></div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold" id="rTag" style="color:rgba(255,255,255,.6)">Smart Pick</div>
+                  <h3 class="display" id="rName" style="font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.04em;line-height:1.05">Lume 5</h3>
+                  <div class="display" id="rPrice" style="font-size:1.2rem;font-weight:700;color:var(--lime)">$549</div>
+                </div>
+              </div>
+              <p id="rNote" class="f-note mt-4"></p>
+              <ul id="rReasons" class="f-reasons"></ul>
+              <div class="grid grid-cols-3 gap-2 mt-5" id="rStats"></div>
+
+              <div class="mt-6">
+                <div class="f-label">Make it a bundle · 10% off add-ons</div>
+                <div class="grid gap-2" id="rAddons"></div>
+              </div>
+
+              <div class="mt-5">
+                <div class="f-label">Payment</div>
+                <div class="seg" id="rPay">
+                  <button type="button" data-pay="1" class="on">Pay once</button>
+                  <button type="button" data-pay="3">3× 0%</button>
+                  <button type="button" data-pay="12">12×</button>
+                </div>
+                <label class="ck" style="margin-top:.8rem"><input type="checkbox" id="rTrade"><span class="bx"><svg class="i"><use href="#i-check"/></svg></span>Trade-in: I have an old robot vacuum <em>−$50</em></label>
+              </div>
+
+              <div class="mt-5 pt-4" style="border-top:1px solid rgba(255,255,255,.14)" id="rLines"></div>
+              <div class="flex items-end justify-between gap-3 mt-3">
+                <div>
+                  <div class="text-xs font-bold" style="color:rgba(255,255,255,.55)">Total · VAT included</div>
+                  <div class="display" id="rTotal" style="font-size:2.3rem;font-weight:800;letter-spacing:-.05em;line-height:1">$549</div>
+                </div>
+                <div class="text-right text-sm font-bold" id="rMonthly" style="color:var(--lime)"></div>
+              </div>
+
+              <div class="grid gap-3 mt-5 sm:grid-cols-2">
+                <button class="btn btn-lime" type="button" id="rAdd" style="justify-content:space-between">Add bundle <span class="ico"><svg class="i"><use href="#i-cart"/></svg></span></button>
+                <a class="btn btn-line" id="rView" href="catalog.html" style="justify-content:space-between">Full details <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+              </div>
+              <div class="mt-5" id="rAlt"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Compare ===== -->
+    <section class="sec" id="compare" style="padding-top:0">
+      <div class="wrap">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div><span class="eyebrow rv">Compare models</span><h2 class="h2 rv" style="--d:.06s">Compare on facts<br><span class="grad">not on marketing talk</span></h2></div>
+          <p class="lead rv" style="max-width:44ch">Pick up to three robots. We highlight the best value in every row so you can decide in a minute.</p>
+        </div>
+        <div class="fchips mb-6 rv" id="cmpChips"></div>
+        <div class="cmpwrap rv"><table class="cmp" id="cmpTable"></table></div>
+        <p class="text-xs mut mt-4">Specifications measured in Lunevo lab conditions. Coverage per charge in standard mode. All prices in USD, VAT included.</p>
+      </div>
+    </section>
+
+    <!-- ===== Why buy here ===== -->
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="grid gap-6 lg:grid-cols-[1fr_.8fr] lg:items-end mb-10">
+          <div><span class="eyebrow rv">Why Lunevo.com</span><h2 class="h2 rv" style="--d:.06s">Buy direct <span class="grad">get parts and support for years</span></h2></div>
+          <p class="lead rv" style="--d:.12s">Marketplaces sell boxes. We sell outcomes — with real people in Paris standing behind every robot.</p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="ben rv"><div class="ib"><svg class="i"><use href="#i-return"/></svg></div><h3 class="h3">30-day home trial</h3><p>Live with it for a month. Not in love? We collect it for free and refund every cent.</p></div>
+          <div class="ben rv" style="--d:.06s"><div class="ib"><svg class="i"><use href="#i-shield"/></svg></div><h3 class="h3">3-year warranty</h3><p>Double the legal minimum, with battery covered. Extend to 5 years in one click.</p></div>
+          <div class="ben rv" style="--d:.12s"><div class="ib"><svg class="i"><use href="#i-tag"/></svg></div><h3 class="h3">Price-match promise</h3><p>Found it cheaper at an authorised EU retailer within 14 days? We refund the difference.</p></div>
+          <div class="ben rv"><div class="ib"><svg class="i"><use href="#i-truck"/></svg></div><h3 class="h3">Free 2–4 day delivery</h3><p>Shipped from our Lyon warehouse, carbon-neutral, with live tracking to your door.</p></div>
+          <div class="ben rv" style="--d:.06s"><div class="ib"><svg class="i"><use href="#i-headset"/></svg></div><h3 class="h3">Humans, in French &amp; English</h3><p>Setup help by phone, chat or video — Monday to Saturday, 8 am to 8 pm Paris time.</p></div>
+          <div class="ben rv" style="--d:.12s"><div class="ib"><svg class="i"><use href="#i-leaf"/></svg></div><h3 class="h3">Repairable by design</h3><p>Spare parts for 8 years and a €0 trade-in boost when you upgrade — nothing wasted.</p></div>
+        </div>
+
+        <div class="dark mt-gap rv" style="padding:var(--pad-block)">
+          <div class="grid gap-8 lg:grid-cols-[.7fr_1.3fr] lg:items-center">
+            <div>
+              <span class="eyebrow eyebrow--lime">The honest comparison</span>
+              <h3 class="h2" style="font-size:clamp(1.6rem,3vw,2.4rem)">Lunevo vs a marketplace seller</h3>
+              <p class="on-dark" style="margin-top:.8rem">Same robot, very different peace of mind.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="vs">
+                <thead><tr><th></th><th>Lunevo.com</th><th>Marketplace</th></tr></thead>
+                <tbody>
+                  <tr><td>Warranty</td><td>3 years, official</td><td>Often 1 year, via seller</td></tr>
+                  <tr><td>Free trial &amp; returns</td><td>30 days, pickup included</td><td>14 days, you pay return</td></tr>
+                  <tr><td>Setup support</td><td>Phone, chat &amp; video</td><td>Ticket system</td></tr>
+                  <tr><td>Firmware &amp; spare parts</td><td>8 years guaranteed</td><td>Not guaranteed</td></tr>
+                  <tr><td>Free spare kit ($39)</td><td>With Orbit Pro &amp; Atlas</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Reviews ===== -->
+    <section class="sec" id="reviews">
+      <div class="wrap">
+        <div class="max-w-3xl mb-10"><span class="eyebrow rv">Loved across France</span><h2 class="h2 rv" style="--d:.06s">Thousands of homes <span class="grad">already recommend us</span></h2></div>
+        <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
+          <div class="mi mi--tall rv">
+            <img src="https://images.pexels.com/photos/19147315/pexels-photo-19147315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=900" alt="Husky resting on a carpet at home" loading="lazy">
+            <div style="left:26px;right:26px;bottom:26px">
+              <svg class="i" style="width:2.2rem;height:2.2rem;color:var(--lime);fill:var(--lime);stroke:none;margin-bottom:.4rem"><use href="#i-star"/></svg>
+              <p class="display" style="font-size:clamp(1.1rem,2vw,1.45rem);font-weight:700;letter-spacing:-.02em;line-height:1.3;margin:0">“Two huskies, one Lume 5 Pet. I haven’t picked up a fur tumbleweed in four months.”</p>
+              <span style="display:block;margin-top:.8rem;font-weight:700">Lucas M. · Lyon</span>
+            </div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="rev rv">
+              <div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div>
+              <p>“The Orbit Pro washes its own mops. I genuinely forgot what it was like to touch a dirty one. Parquet has never looked better.”</p>
+              <div class="who"><i style="background:#7b5cff">CD</i><div class="leading-tight"><b>Camille D.</b><div class="text-xs mut">Paris 11e · Orbit Pro</div></div></div>
+            </div>
+            <div class="rev rv" style="--d:.07s">
+              <div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div>
+              <p>“Delivered in two days, set up in ten minutes. Support called me to check the first clean went well. That’s rare.”</p>
+              <div class="who"><i style="background:#ff7a5c">IB</i><div class="leading-tight"><b>Inès B.</b><div class="text-xs mut">Bordeaux · Lume 5</div></div></div>
+            </div>
+            <div class="rev rv" style="--d:.14s">
+              <div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div>
+              <p>“Compared six brands. The finder pointed me at the Air One and saved me $300. Perfect for my 45 m² studio.”</p>
+              <div class="who"><i style="background:#4a3fd6">AR</i><div class="leading-tight"><b>Antoine R.</b><div class="text-xs mut">Marseille · Air One</div></div></div>
+            </div>
+            <div class="rev rv" style="--d:.21s">
+              <div class="stars"><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg><svg class="i"><use href="#i-star"/></svg></div>
+              <p>“Atlas Ultra climbs the old stone threshold between our rooms like it’s nothing. The mop pads lift on the rug. Magic.”</p>
+              <div class="who"><i style="background:#0c0e20">TL</i><div class="leading-tight"><b>Théo L.</b><div class="text-xs mut">Strasbourg · Atlas Ultra</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Photo mosaic ===== -->
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div><span class="eyebrow rv">Made for real homes</span><h2 class="h2 rv" style="--d:.06s">Flats lofts and houses<br><span class="grad">all on one map</span></h2></div>
+          <a href="blog.html" class="btn btn-ghost btn-sm rv">Read the journal <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        </div>
+        <div class="mos">
+          <div class="mi m1 rv"><img src="https://images.pexels.com/photos/8092165/pexels-photo-8092165.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1000" alt="Bright minimalist living room" loading="lazy"><div><b>Haussmann living room</b><span>Herringbone parquet · 95 m² · Orbit Pro</span></div></div>
+          <div class="mi m2 rv" style="--d:.06s"><img src="https://images.pexels.com/photos/8146330/pexels-photo-8146330.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=700&w=800" alt="Bright room with wooden floor" loading="lazy"><div><b>Montmartre studio</b><span>35 m² · Air One</span></div></div>
+          <div class="mi m3 rv" style="--d:.12s"><img src="https://images.pexels.com/photos/6523297/pexels-photo-6523297.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=700&w=800" alt="Spacious living room" loading="lazy"><div><b>Lyon family flat</b><span>110 m² · Lume 5 Pet</span></div></div>
+          <div class="mi m4 rv" style="--d:.06s"><img src="https://images.pexels.com/photos/8089172/pexels-photo-8089172.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=700&w=1200" alt="Open kitchen and living room" loading="lazy"><div><b>Open-plan loft</b><span>Tile, wood and rugs · 160 m² · Atlas Ultra</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Blog preview ===== -->
+    <section class="sec" style="padding-top:0">
+      <div class="wrap">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div><span class="eyebrow rv">The journal</span><h2 class="h2 rv" style="--d:.06s">Guides on living with <span class="grad">a cleaning robot</span></h2></div>
+          <a href="blog.html" class="btn btn-ghost btn-sm rv">All articles <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        </div>
+        <div class="grid gap-5 md:grid-cols-3" id="homeBlog"></div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="sec" id="faq" style="padding-top:0">
+      <div class="wrap">
+        <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+          <div class="lg:sticky lg:top-28 self-start">
+            <span class="eyebrow rv">Questions</span>
+            <h2 class="h2 rv" style="--d:.06s">Answers you need <span class="grad">before you order</span></h2>
+            <p class="lead mt-4 rv">Still unsure? Talk to a real person in Paris — we’ll help you choose, no pressure.</p>
+            <div class="flex flex-wrap gap-3 mt-6 rv">
+              <a class="btn btn-dark btn-sm" href="contact.html">Talk to an expert <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+              <a class="btn btn-ghost btn-sm" href="support.html">Help centre <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+            </div>
+          </div>
+          <div class="grid gap-3" id="homeFaq"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Final CTA ===== -->
+    <section class="sec-sm" style="padding-top:0">
+      <div class="wrap">
+        <div class="dark cta rv">
+          <div class="grid gap-10 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
+            <div>
+              <span class="eyebrow eyebrow--lime">Ready when you are</span>
+              <h2 class="h2" style="font-size:clamp(2rem,5vw,4rem)">Get your weekends<br>back starting today</h2>
+              <p class="on-dark" style="max-width:46ch;margin:1.2rem 0 2rem">Try any Lunevo for 30 days. Love it, keep it. Don’t, and we’ll collect it for free. Orbit Pro and Atlas Ultra include a $39 spare kit this month.</p>
+              <div class="flex flex-wrap gap-3">
+                <a class="btn btn-lime" href="catalog.html">Shop all robots <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+                <a class="btn btn-line" href="#finder">Take the 1-minute quiz <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+              </div>
+            </div>
+            <div class="grid gap-3">
+              <div class="mini mini--row spot"><span class="tile tile--lime"><svg class="i"><use href="#i-return"/></svg></span><div><b>30-day trial</b><span>Free pickup if you change your mind</span></div></div>
+              <div class="mini mini--row spot"><span class="tile tile--lime"><svg class="i"><use href="#i-shield"/></svg></span><div><b>3-year warranty</b><span>Battery and motor included</span></div></div>
+              <div class="mini mini--row spot"><span class="tile tile--lime"><svg class="i"><use href="#i-tag"/></svg></span><div><b>Pay in 3× at 0%</b><span>No fees, instant approval</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ===== Footer ===== -->
+  <footer class="ft">
+    <div class="wrap">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <a class="logo" href="index.html"><img src="img/logo-mark-light.svg" width="34" height="34" alt=""><span>LUNEVO</span></a>
+          <p class="ft-about">Robot vacuums designed in Paris. Obsessively quiet, absurdly powerful, beautiful enough to leave out.</p>
+          <form class="nl" id="nlForm" novalidate>
+            <input type="email" placeholder="Your email — get 10% off" aria-label="Email">
+            <button class="btn btn-lime btn-sm" type="submit">Join <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></button>
+          </form>
+          <p id="nlMsg"></p>
+        </div>
+        <div>
+          <h5>Shop</h5>
+          <ul>
+            <li><a href="catalog.html">All robots</a></li>
+            <li><a href="product.html?id=atlas-ultra">Atlas Ultra</a></li>
+            <li><a href="product.html?id=orbit-pro">Orbit Pro</a></li>
+            <li><a href="index.html#finder">Robot finder</a></li>
+            <li><a href="index.html#compare">Compare models</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About Lunevo</a></li>
+            <li><a href="blog.html">Journal</a></li>
+            <li><a href="contact.html">Contact &amp; showroom</a></li>
+            <li><a href="about.html">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Support</h5>
+          <ul>
+            <li><a href="support.html">Help centre</a></li>
+            <li><a href="support.html">Delivery &amp; returns</a></li>
+            <li><a href="support.html">Warranty</a></li>
+            <li><a href="tel:+33184880042">+33 1 84 88 00 42</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-12 pt-6" style="border-top:1px solid rgba(255,255,255,.12)">
+        <p class="ft-legal">© 2019–2026 Lunevo SAS · 18 Rue de Turbigo, 75002 Paris</p>
+        <!-- placeholder link: replace href="#" with the real URL when it is ready -->
+        <a class="ft-credit" href="#">Created by Artem Punin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Scripts ===== -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/robot3d.js"></script>
+</body>
+</html>

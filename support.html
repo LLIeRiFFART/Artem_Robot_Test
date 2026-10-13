@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help centre | LUNEVO</title>
+  <meta name="description" content="Lunevo help centre: delivery, 30-day trial and returns, 3-year warranty, setup guide and frequently asked questions.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body data-page="support">
+  <script src="js/icons.js"></script>
+
+  <!-- ===== Header ===== -->
+  <header id="hdr">
+    <div class="hdr-in">
+      <a class="logo" href="index.html" aria-label="Lunevo — home">
+        <img src="img/logo-mark.svg" width="34" height="34" alt="">
+        <span>LUNEVO</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="catalog.html">Robots</a>
+        <a href="index.html#tech">Technology</a>
+        <a href="index.html#finder">Find yours</a>
+        <a href="index.html#compare">Compare</a>
+        <a href="blog.html">Journal</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="hdr-act">
+        <button id="cartBtn" class="icon-btn" type="button" aria-label="Open cart"><svg class="i"><use href="#i-cart"/></svg><b id="cartCount">0</b></button>
+        <a class="btn btn-lime btn-sm hide-sm" href="catalog.html">Shop now <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        <button id="burger" class="icon-btn lg-hide" type="button" aria-label="Open menu"><svg class="i"><use href="#i-menu"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Mobile menu ===== -->
+  <div class="mnav" id="mnav" aria-hidden="true">
+    <div class="mnav-top">
+      <a class="logo logo--light" href="index.html"><img src="img/logo-mark-light.svg" width="34" height="34" alt=""><span>LUNEVO</span></a>
+      <button class="icon-btn" id="mclose" type="button" aria-label="Close menu"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+    <a class="ml" href="catalog.html">Robots <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#tech">Technology <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#finder">Find your robot <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="index.html#compare">Compare <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="blog.html">Journal <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="about.html">About <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="support.html">Support <svg class="i"><use href="#i-arrow"/></svg></a>
+    <a class="ml" href="contact.html">Contact <svg class="i"><use href="#i-arrow"/></svg></a>
+    <p class="mnav-note">Free delivery in France · 30-day trial · 3-year warranty</p>
+  </div>
+
+  <!-- ===== Cart drawer ===== -->
+  <div class="ov" id="ov"></div>
+  <aside id="cart" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-head">
+      <h3 class="h3" style="margin:0">Your cart <span id="cartN" class="mut" style="font-family:Manrope;font-weight:600"></span></h3>
+      <button class="icon-btn" id="cartClose" type="button" aria-label="Close cart"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="cart-ship">
+      <div class="ship-bar"><i id="shipBar" style="width:0"></i></div>
+      <p id="shipTxt" class="text-xs mut mt-2 font-bold"></p>
+    </div>
+    <div id="cartItems" class="cart-body"></div>
+    <div class="cart-foot">
+      <div class="flex justify-between text-sm mut font-bold"><span>Delivery</span><span>Free</span></div>
+      <div class="flex justify-between items-center mt-2">
+        <span class="font-bold">Total <small class="mut font-semibold">VAT incl.</small></span>
+        <b id="cartTotal" class="display" style="font-size:1.5rem;letter-spacing:-.03em">$0</b>
+      </div>
+      <button id="checkout" class="btn btn-dark btn-block mt-4" type="button">Secure checkout <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></button>
+      <p class="text-xs mut text-center mt-3">30-day trial · Free returns · Pay in 3× at 0%</p>
+    </div>
+  </aside>
+
+  <div id="toast" role="status"><svg class="i"><use href="#i-check"/></svg><span id="toastT"></span></div>
+
+
+  <main id="main">
+    <div class="wrap pagetop">
+
+      <div class="phero">
+        <div class="crumb rv"><a href="index.html">Home</a><svg class="i"><use href="#i-chev-r"/></svg><span style="color:var(--ink)">Help centre</span></div>
+        <div class="grid gap-6 lg:grid-cols-[1.2fr_.8fr] lg:items-end mt-5">
+          <h1 class="h2 h2--page rv">How can we <span class="grad">help?</span></h1>
+          <p class="lead rv">Delivery, returns, warranty and setup — everything in one place.</p>
+        </div>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-3 mt-6">
+        <div class="ben rv"><div class="ib"><svg class="i"><use href="#i-truck"/></svg></div><h3 class="h3">Delivery</h3><p>Free in France and EU. 2–4 working days from our Lyon hub, with live tracking. Corsica and overseas territories: 5–8 days.</p></div>
+        <div class="ben rv" style="--d:.06s"><div class="ib"><svg class="i"><use href="#i-return"/></svg></div><h3 class="h3">30-day trial &amp; returns</h3><p>Not for you? Request a pickup from your account. We collect it free and refund within 5 working days.</p></div>
+        <div class="ben rv" style="--d:.12s"><div class="ib"><svg class="i"><use href="#i-shield"/></svg></div><h3 class="h3">3-year warranty</h3><p>Covers motor, battery and electronics. Extend to 5 years from $79. Spare parts available for 8 years.</p></div>
+      </div>
+
+      <!-- Setup steps -->
+      <section class="sec">
+        <div class="mb-10"><span class="eyebrow rv">Setup in 10 minutes</span><h2 class="h2 rv" style="--d:.06s">From box to <span class="grad">first clean</span></h2></div>
+        <div class="grid gap-4 md:grid-cols-4">
+          <div class="bt bt-vio spot rv" style="min-height:220px"><b class="display" style="font-size:3rem;color:var(--lime)">01</b><div><h3 class="h3" style="margin:0 0 .4rem">Unbox &amp; plug in</h3><p>Place the station against a wall with 0.5 m free each side.</p></div></div>
+          <div class="bt bt-white spot rv" style="--d:.06s;min-height:220px"><b class="display grad" style="font-size:3rem">02</b><div><h3 class="h3" style="margin:0 0 .4rem">Download the app</h3><p class="mut">Scan the QR code and connect to your Wi-Fi in two taps.</p></div></div>
+          <div class="bt bt-lime spot rv" style="--d:.12s;min-height:220px"><b class="display" style="font-size:3rem">03</b><div><h3 class="h3" style="margin:0 0 .4rem">Let it map</h3><p>A 4-minute exploration run builds your 3D map automatically.</p></div></div>
+          <div class="bt bt-vio spot rv" style="--d:.18s;min-height:220px"><b class="display" style="font-size:3rem;color:var(--lime)">04</b><div><h3 class="h3" style="margin:0 0 .4rem">Name your rooms</h3><p>Tap “Clean” — then go enjoy your day.</p></div></div>
+        </div>
+      </section>
+
+      <!-- FAQ (rendered by js/main.js from js/data.js) -->
+      <section class="sec" style="padding-top:0">
+        <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+          <div class="lg:sticky lg:top-28 self-start">
+            <span class="eyebrow">FAQ</span>
+            <h2 class="h2">Quick answers</h2>
+            <p class="lead mt-4">Can’t find yours? Call +33 1 84 88 00 42 or write to hello@lunevo.com.</p>
+            <a class="btn btn-dark btn-sm mt-6" href="contact.html">Contact us <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+          </div>
+          <div class="grid gap-3" id="supportFaq"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+
+  <!-- ===== Footer ===== -->
+  <footer class="ft">
+    <div class="wrap">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <a class="logo" href="index.html"><img src="img/logo-mark-light.svg" width="34" height="34" alt=""><span>LUNEVO</span></a>
+          <p class="ft-about">Robot vacuums designed in Paris. Obsessively quiet, absurdly powerful, beautiful enough to leave out.</p>
+          <form class="nl" id="nlForm" novalidate>
+            <input type="email" placeholder="Your email — get 10% off" aria-label="Email">
+            <button class="btn btn-lime btn-sm" type="submit">Join <span class="ico"><svg class="i"><use href="#i-arrow"/></svg></span></button>
+          </form>
+          <p id="nlMsg"></p>
+        </div>
+        <div>
+          <h5>Shop</h5>
+          <ul>
+            <li><a href="catalog.html">All robots</a></li>
+            <li><a href="product.html?id=atlas-ultra">Atlas Ultra</a></li>
+            <li><a href="product.html?id=orbit-pro">Orbit Pro</a></li>
+            <li><a href="index.html#finder">Robot finder</a></li>
+            <li><a href="index.html#compare">Compare models</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About Lunevo</a></li>
+            <li><a href="blog.html">Journal</a></li>
+            <li><a href="contact.html">Contact &amp; showroom</a></li>
+            <li><a href="about.html">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Support</h5>
+          <ul>
+            <li><a href="support.html">Help centre</a></li>
+            <li><a href="support.html">Delivery &amp; returns</a></li>
+            <li><a href="support.html">Warranty</a></li>
+            <li><a href="tel:+33184880042">+33 1 84 88 00 42</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-12 pt-6" style="border-top:1px solid rgba(255,255,255,.12)">
+        <p class="ft-legal">© 2019–2026 Lunevo SAS · 18 Rue de Turbigo, 75002 Paris</p>
+        <!-- placeholder link: replace href="#" with the real URL when it is ready -->
+        <a class="ft-credit" href="#">Created by Artem Punin</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
